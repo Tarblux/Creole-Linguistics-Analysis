@@ -1,0 +1,261 @@
+---
+title: "Creole Linguistics Analysis"
+author: "Tariq Williams" 
+date: "April 2023"
+output: 
+  github_document: 
+    toc: true
+    toc_depth: 2
+---
+
+```{r setup, include = FALSE}
+# This setup chunk sets global defaults and includes the tidyverse packages
+# The option include = FALSE prevents warnings and messages from printing to your report.
+# Change the next option to echo = FALSE to hide code chunks by default 
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(tm)
+library(readxl)
+```
+
+#Read in data
+
+```{r}
+
+Song_Scrape_Trial <- read_excel("Song Scrape Trial.xlsx")
+
+english_words_patois_edit <- read.table("english_words_patois_edit.txt", header = FALSE, col.names = "words")
+
+Try_2 <- read_excel("lyrics.xlsx")
+
+zongo <- read_excel("lyrics_3.xlsx")
+```
+
+#Data test 
+
+```{r}
+
+
+# download the English Words 
+#download.file("https://raw.githubusercontent.com/dwyl/english-words/master/words.txt",
+              # destfile = "english_words.txt", quiet = TRUE)
+
+# read in the Patois text
+text <- "Dem love chat, dem nuh run dem block Run dem block, 1st Class Outside wid half-dozen gunman ready fi do the action"
+
+# extract all words from the text
+all_words <- unlist(strsplit(text, "\\W+"))
+
+# read in the English Words 
+english_words <- readLines("english_words.txt")
+
+
+# identify the English words in the Patois text
+english_words_in_text <- all_words[all_words %in% english_words]
+
+# print the identified English words
+english_words_in_text
+
+
+
+````
+
+
+#Data test Trial 2 
+
+```{r}
+
+# read in the Patois text
+text <- "Dem love chat, dem nuh run dem block Run dem block, 1st Class Outside wid half-dozen gunman ready fi do the action"
+
+# extract all words from the text
+all_words <- unlist(strsplit(text, "\\W+"))
+
+# read in the English Words 
+english_words <- readLines("english_words.txt")
+
+
+# identify the English words in the Patois text
+english_words_in_text <- all_words[all_words %in% english_words]
+
+# print the identified English words
+english_words_in_text
+
+
+````
+
+#Test 3 
+
+````{r}
+
+# read in the English words 
+english_words <- readLines("english_words_patois_edit.txt")
+
+# create an empty list to store the identified English words in each song
+english_words_by_song <- list()
+
+# loop over each row of the dataset and extract English words from the lyrics
+for(i in 1:nrow(Song_Scrape_Trial)) {
+  # extract the lyrics of the current song
+  lyrics <- Song_Scrape_Trial$Lyrics[i]
+  # extract all words from the lyrics
+  all_words <- unlist(strsplit(lyrics, "\\W+"))
+  # identify the English words in the lyrics
+  english_words_in_song <- all_words[all_words %in% english_words]
+  # add the identified English words to the list
+  english_words_by_song[[i]] <- english_words_in_song
+}
+
+# print the identified English words in each song
+for(i in 1:length(english_words_by_song)) {
+  cat("Song", i , "English words:", english_words_by_song[[i]], "\n")}
+
+
+
+````
+
+
+#Final Test 
+
+```{r}
+
+
+# read in the English Words 
+english_words <- readLines("english_words_patois_edit.txt")
+
+# create variables to store the counts
+english_word_count <- numeric(nrow(Song_Scrape_Trial))
+patois_word_count <- numeric(nrow(Song_Scrape_Trial))
+
+# loop through each row in the table
+for (i in 1:nrow(Song_Scrape_Trial)) {
+  # extract the lyrics from the row
+  lyrics <- Song_Scrape_Trial$Lyrics[i]
+  
+  # split the lyrics into individual words
+  words <- unlist(strsplit(lyrics, "\\W+"))
+  
+  # count the number of English and non-English words
+  english_word_count[i] <- sum(words %in% english_words)
+  patois_word_count[i] <- length(words) - english_word_count[i]
+}
+
+# create a data frame with the results
+word_counts <- data.frame(Song_Scrape_Trial$Song, english_word_count, patois_word_count)
+colnames(word_counts) <- c("Song", "English Words", "Patois Words")
+
+
+````
+
+
+#Final Test with new data frame 3 
+
+```{r}
+
+# create variables to store the counts
+english_word_count <- numeric(nrow(Try_2))
+patois_word_count <- numeric(nrow(Try_2))
+
+# loop through each row in the table
+for (i in 1:nrow(Try_2)) {
+  # extract the lyrics from the row
+  lyrics <- Try_2$Lyrics[i]
+  
+  # split the lyrics into individual words
+  words <- unlist(strsplit(lyrics, "\\W+"))
+  
+  # count the number of English and non-English words
+  english_word_count[i] <- sum(words %in% english_words)
+  patois_word_count[i] <- length(words) - english_word_count[i]
+}
+
+# create a data frame with the results
+word_counts <- data.frame(Try_2$Song, english_word_count, patois_word_count)
+colnames(word_counts) <- c("Song", "English Words", "Patois Words")
+
+
+```` 
+
+
+#Final Test with new data frame 3 
+
+```{r}
+
+# create variables to store the counts
+english_word_count <- numeric(nrow(Try_2))
+patois_word_count <- numeric(nrow(Try_2))
+
+# loop through each row in the table
+for (i in 1:nrow(Try_2)) {
+  # extract the lyrics from the row
+  lyrics <- Try_2$Lyrics[i]
+  
+  # split the lyrics into individual words
+  words <- unlist(strsplit(lyrics, "\\W+"))
+  
+  # count the number of English and non-English words
+  english_word_count[i] <- sum(words %in% english_words)
+  patois_word_count[i] <- length(words) - english_word_count[i]
+}
+
+# create a data frame with the results
+word_counts <- data.frame(Try_2$Song, english_word_count, patois_word_count)
+colnames(word_counts) <- c("Song", "English Words", "Patois Words")
+
+
+```` 
+
+#Verification 
+
+```{r}
+
+# read in the English Words
+english_words <- readLines("english_words_patois_edit.txt")
+
+# initialize lists to store english and patois words
+english_words_list <- list()
+patois_words_list <- list()
+
+# loop through each row in the Song_Scrape_Trial data frame
+for (i in 1:nrow(Song_Scrape_Trial)) {
+  # extract lyrics from the current row
+  lyrics <- Song_Scrape_Trial[i, "Lyrics"]
+  
+  # extract all words from the lyrics
+  all_words <- unlist(strsplit(as.character(lyrics), "\\W+"))
+  
+  # identify the English words in the lyrics
+  english_words_in_lyrics <- all_words[all_words %in% english_words]
+  
+  # add the English words to the english_words_list
+  english_words_list[[i]] <- english_words_in_lyrics
+  
+  # add the patois words to the patois_words_list
+  patois_words_list[[i]] <- all_words[!all_words %in% english_words]
+}
+
+# flatten the english and patois word lists
+english_words <- unlist(english_words_list)
+patois_words <- unlist(patois_words_list)
+
+# print all the English words found
+cat("English words:\n")
+print(unique(english_words))
+
+# print all the patois words found
+cat("\n Patois words:\n")
+print(unique(patois_words))
+
+
+
+`````
+
+#VIZ 
+
+`````{r}
+
+
+
+
+
+`````

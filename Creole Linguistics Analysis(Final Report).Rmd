@@ -1,0 +1,80 @@
+---
+title: "Creole Linguistics Analysis"
+author: "Tariq Williams" 
+date: "April 2023"
+output: 
+  github_document: 
+    toc: true
+    toc_depth: 2
+---
+
+```{r setup, include = FALSE}
+# This setup chunk sets global defaults and includes the tidyverse packages
+# The option include = FALSE prevents warnings and messages from printing to your report.
+# Change the next option to echo = FALSE to hide code chunks by default 
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(tm)
+library(readxl)
+```
+
+#Read in data
+
+This is all the code used to read in the datasets 
+
+```{r}
+
+Song_Scrape_Trial <- read_excel("Song Scrape Trial.xlsx")
+
+english_words_patois_edit <- read.table("english_words_patois_edit.txt", header = FALSE, col.names = "words")
+
+lyrics_data <- read_excel("lyrics_3.xlsx")
+
+```
+
+#Data Analysis 
+
+This is all the code used to analyze the data 
+
+#Word Count Analysis 
+
+``` {r}
+
+# read in the English Words 
+english_words <- readLines("english_words_patois_edit.txt")
+
+# create variables to store the counts
+english_word_count <- numeric(nrow(lyrics_data))
+patois_word_count <- numeric(nrow(lyrics_data))
+
+# loop through each row in the table
+for (i in 1:nrow(lyrics_data)) {
+  # extract the lyrics from the row
+  lyrics <- lyrics_data$Lyrics[i]
+  
+  # split the lyrics into individual words
+  words <- unlist(strsplit(lyrics, "\\W+"))
+  
+  # count the number of English and non-English words
+  english_word_count[i] <- sum(words %in% english_words)
+  patois_word_count[i] <- length(words) - english_word_count[i]
+}
+
+# create a data frame with the results
+word_counts <- data.frame(lyrics_data$Song, english_word_count, patois_word_count)
+colnames(word_counts) <- c("Song", "English Words", "Patois Words")
+
+
+```
+
+
+
+# Data Visualiation 
+
+This is all the code that is used to visualize the data. 
+
+```{r}
+
+
+
+```
