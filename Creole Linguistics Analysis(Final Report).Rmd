@@ -24,13 +24,24 @@ This is all the code used to read in the datasets
 
 ```{r}
 
-Song_Scrape_Trial <- read_excel("Song Scrape Trial.xlsx")
+english_words <- read.table("english_words_patois_edit.txt", header = FALSE, col.names = "words")
 
-english_words_patois_edit <- read.table("english_words_patois_edit.txt", header = FALSE, col.names = "words")
-
-lyrics_data <- read_excel("lyrics_3.xlsx")
+lyrics_final <- read_excel("lyrics_Final.xlsx")
 
 ```
+
+#Data Cleaning 
+
+````{r}
+
+# remove words ending with "embed" from the Lyrics column
+lyrics_final$Lyrics <- gsub("\\b\\w+embed\\b", "", lyrics_final$Lyrics, ignore.case = TRUE)
+
+
+
+
+````
+
 
 #Data Analysis 
 
@@ -43,14 +54,20 @@ This is all the code used to analyze the data
 # read in the English Words 
 english_words <- readLines("english_words_patois_edit.txt")
 
+# convert all the words in the English dictionary to lowercase
+english_words <- tolower(english_words)
+
 # create variables to store the counts
-english_word_count <- numeric(nrow(lyrics_data))
-patois_word_count <- numeric(nrow(lyrics_data))
+english_word_count <- numeric(nrow(lyrics_final))
+patois_word_count <- numeric(nrow(lyrics_final))
 
 # loop through each row in the table
-for (i in 1:nrow(lyrics_data)) {
+for (i in 1:nrow(lyrics_final)) {
   # extract the lyrics from the row
-  lyrics <- lyrics_data$Lyrics[i]
+  lyrics <- lyrics_final$Lyrics[i]
+  
+  # convert all the words in the lyrics to lowercase
+  lyrics <- tolower(lyrics)
   
   # split the lyrics into individual words
   words <- unlist(strsplit(lyrics, "\\W+"))
@@ -61,19 +78,35 @@ for (i in 1:nrow(lyrics_data)) {
 }
 
 # create a data frame with the results
-word_counts <- data.frame(lyrics_data$Song, english_word_count, patois_word_count)
-colnames(word_counts) <- c("Song", "English Words", "Patois Words")
+word_counts <- data.frame( lyrics_final$Artist, lyrics_final$Song, lyrics_final$Year, lyrics_final$Genre ,   english_word_count,patois_word_count)
 
+colnames(word_counts) <- c( "Artist", "Song" , "Year" , "Genre" , "English Words", "Patois Words")
 
 ```
 
+# Adding Variables and Filters
 
+```{r}
+
+# Calculate Patois and English Percentages 
+
+word_counts$Patois_Percentage <- round(100 * word_counts$`Patois Words` / (word_counts$`English Words` + word_counts$`Patois Words`),2)
+
+word_counts$English_Percentage <- round(100 * word_counts$`English Words`/ (word_counts$`English Words` + word_counts$`Patois Words`),2)
+
+# Filters 
+
+# Filter for songs with genre "Dancehall"
+dancehall_songs <- word_counts[word_counts$Genre == "Dancehall",]
+
+```
 
 # Data Visualiation 
 
 This is all the code that is used to visualize the data. 
 
 ```{r}
+
 
 
 

@@ -26,9 +26,9 @@ Song_Scrape_Trial <- read_excel("Song Scrape Trial.xlsx")
 
 english_words_patois_edit <- read.table("english_words_patois_edit.txt", header = FALSE, col.names = "words")
 
-Try_2 <- read_excel("lyrics.xlsx")
-
 zongo <- read_excel("lyrics_3.xlsx")
+
+lyrics_data <- read_excel("lyrics_3.xlsx")
 ```
 
 #Data test 
@@ -212,14 +212,20 @@ colnames(word_counts) <- c("Song", "English Words", "Patois Words")
 # read in the English Words
 english_words <- readLines("english_words_patois_edit.txt")
 
+# convert all the words in the English dictionary to lowercase
+english_words <- tolower(english_words)
+
 # initialize lists to store english and patois words
 english_words_list <- list()
 patois_words_list <- list()
 
 # loop through each row in the Song_Scrape_Trial data frame
-for (i in 1:nrow(Song_Scrape_Trial)) {
+for (i in 1:nrow(lyrics_data)) {
   # extract lyrics from the current row
-  lyrics <- Song_Scrape_Trial[i, "Lyrics"]
+  lyrics <- lyrics_data[i, "Lyrics"]
+  
+    # convert all the words in the lyrics to lowercase
+  lyrics <- tolower(lyrics)
   
   # extract all words from the lyrics
   all_words <- unlist(strsplit(as.character(lyrics), "\\W+"))
@@ -250,12 +256,120 @@ print(unique(patois_words))
 
 `````
 
-#VIZ 
+# Specified Verification W/ lyrics_data (25 variables)
 
 `````{r}
 
+# remove words ending with "embed" from the Lyrics column
+lyrics_data$Lyrics <- gsub("\\b\\w+embed\\b", "", lyrics_data$Lyrics, ignore.case = TRUE)
+
+
+``````
+
+`````{r}
+
+# read in the English Words
+english_words <- readLines("english_words_patois_edit.txt")
+
+# convert all the words in the English dictionary to lowercase
+english_words <- tolower(english_words)
 
 
 
+# initialize lists to store english and patois words
+english_words_list <- list()
+patois_words_list <- list()
+
+# specify the song to analyze
+song_index <- 1
+
+# loop through each row in the Song_Scrape_Trial data frame
+for (i in 1:nrow(lyrics_data)) {
+  # extract lyrics from the current row
+  lyrics <- lyrics_data[song_index, "Lyrics"]
+  
+    # convert all the words in the lyrics to lowercase
+  lyrics <- tolower(lyrics)
+  
+  # extract all words from the lyrics
+  all_words <- unlist(strsplit(as.character(lyrics), "\\W+"))
+  
+  # identify the English words in the lyrics
+  english_words_in_lyrics <- all_words[all_words %in% english_words]
+  
+  # add the English words to the english_words_list
+  english_words_list[[i]] <- english_words_in_lyrics
+  
+  # add the patois words to the patois_words_list
+  patois_words_list[[i]] <- all_words[!all_words %in% english_words]
+}
+
+# flatten the english and patois word lists
+english_words <- unlist(english_words_list)
+patois_words <- unlist(patois_words_list)
+
+# print all the English words found
+cat("English words:\n")
+print(unique(english_words))
+
+# print all the patois words found
+cat("\n Patois words:\n")
+print(unique(patois_words))
+
+
+
+`````
+
+
+# Specified Verification W/ lyrics_final (100 variables)
+
+
+`````{r}
+
+# read in the English Words
+english_words <- readLines("english_words_patois_edit.txt")
+
+# convert all the words in the English dictionary to lowercase
+english_words <- tolower(english_words)
+
+# initialize lists to store english and patois words
+english_words_list <- list()
+patois_words_list <- list()
+
+# specify the song to analyze
+song_index <- 1
+
+# loop through each row in the Song_Scrape_Trial data frame
+for (i in 1:nrow(lyrics_final)) {
+  # extract lyrics from the current row
+  lyrics <- lyrics_final[song_index, "Lyrics"]
+  
+    # convert all the words in the lyrics to lowercase
+  lyrics <- tolower(lyrics)
+  
+  # extract all words from the lyrics
+  all_words <- unlist(strsplit(as.character(lyrics), "\\W+"))
+  
+  # identify the English words in the lyrics
+  english_words_in_lyrics <- all_words[all_words %in% english_words]
+  
+  # add the English words to the english_words_list
+  english_words_list[[i]] <- english_words_in_lyrics
+  
+  # add the patois words to the patois_words_list
+  patois_words_list[[i]] <- all_words[!all_words %in% english_words]
+}
+
+# flatten the english and patois word lists
+english_words <- unlist(english_words_list)
+patois_words <- unlist(patois_words_list)
+
+# print all the English words found
+cat("English words:\n")
+print(unique(english_words))
+
+# print all the patois words found
+cat("\n Patois words:\n")
+print(unique(patois_words))
 
 `````
