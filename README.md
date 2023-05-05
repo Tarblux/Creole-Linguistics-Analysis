@@ -8,7 +8,7 @@ The project uses three datasets:
 
 - `english_words.txt`: a list of 466,589 English words that are found in the Oxford Dictionary 
 - `english_words_patois_edit.txt`: And edit of english_words.txt to remove words that are patois words which are used differently in patois*
-- `lyrics_Final.xlsx`: a dataset of song lyrics from various Jamaican artists. I created this dataset by using a Python script that extracts the lyrics of Jamaican songs from the Genius API, given the artist                          and song name, and saves them to an Excel file which was then imported into R studio 
+- `lyrics_Final.xlsx`: a dataset of song lyrics from various Jamaican artists. I created this dataset by making a Python script that extracts the lyrics of Jamaican songs from the Genius API, given the artist                          and song name, and saves them to an Excel file which was then imported into R studio 
 
 ## Data Cleaning
 
