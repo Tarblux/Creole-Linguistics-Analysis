@@ -13,16 +13,18 @@ The project uses three datasets:
 ## Data Cleaning
 
 -The project cleans the lyrics by removing any words ending with "embed" from the Lyrics column. 
+
 -The project converts all the words in the Lyrics Column to lowercase to improve the accuracy of word detection.
 
 ## Data Analysis
 
 The project analyzes the data by counting the number of English and Patois words in each song. It then calculates the percentage of Patois words and English words in each song.
-To do this , the code calculates the number of English words and Patois (Jamaican Creole) words in each row of the dataset lyrics_final and stores the counts in two variables english_word_count and patois_word_count.The code then creates a data frame word_counts with six columns: Artist, Song, Year, Genre, English Words, and Patois Words. The code uses a for loop which iterates through each row of lyrics_final and uses the strsplit() function to split the lyrics of each song into individual words. For each word, the program checks if it is present in the english_words_patois_edit.txt file. If it is, the word is stored in the list of English words, and if not, it is stored in the list of Patois words. The program then counts the number of English and non-English words and stores them in the english_word_count and patois_word_count lists, respectively.  
+The code uses a for loop which iterates through each row of lyrics_final and uses the strsplit() function to split the lyrics of each song into individual words. For each word, the program checks if it is present in the english_words_patois_edit.txt file. If it is, the word is stored in the list of English words, and if not, it is stored in the list of Patois words. The program then counts the number of English and non-English words and stores them in the english_word_count and patois_word_count lists, respectively. 
+From there, the code calculates the number of English words and Patois (Jamaican Creole) words in each row of the dataset lyrics_final and stores the counts in two variables english_word_count and patois_word_count.The code then creates a data frame word_counts with six columns: Artist, Song, Year, Genre, English Words, and Patois Words.  
 
 Finally, the code creates a new data frame word_counts that combines the columns of lyrics_final with the English Words and Patois Words counts for each song. The column names are then assigned to the appropriate labels. This data frame can then be used for further analysis, such as generating plots or calculating statistics on the language use in Jamaican music.
 
-## Data Visualization
+## Data Visualization (Still in progress) 
 
 The project visualizes the data in two ways (Work in Progress):
 
